@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AEC 201/202 CBT Practice | UNN</title>
+<style>
+:root{--green:#0b5d2a;--green2:#0f7a37;--ink:#1c2630;--mute:#5b6773;--line:#d5dbe1;--bg:#eef2f0;--card:#fff;--red:#b3261e;--amber:#e8a200;--blue:#1f5fbf}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+.hidden{display:none!important}
+header.top{background:var(--green);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header.top .crest{width:42px;height:42px;border-radius:50%;background:#fff;color:var(--green);display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+header.top h1{font-size:16px;margin:0;line-height:1.2}
+header.top small{opacity:.85;display:block;font-weight:400;font-size:12px}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px}
+/* login */
+#login .card{max-width:520px;margin:28px auto}
+#login h2{margin:0 0 4px;font-size:20px}
+#login p.sub{margin:0 0 16px;color:var(--mute);font-size:14px}
+label{display:block;font-size:13px;font-weight:600;margin:12px 0 4px}
+input[type=text]{width:100%;padding:11px 12px;border:1px solid #b9c2cb;border-radius:8px;font-size:16px}
+input[type=text]:focus{outline:2px solid var(--green2);border-color:var(--green2)}
+.err{color:var(--red);font-size:13px;min-height:18px;margin-top:6px}
+.rules{background:#f4f8f5;border:1px solid #d6e5db;border-radius:8px;padding:10px 14px;font-size:13px;margin:16px 0}
+.rules ul{margin:6px 0 0;padding-left:18px}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--green);color:#fff;border:0;border-radius:8px;padding:11px 18px;font-weight:600;font-size:15px}
+.btn:hover{background:var(--green2)}
+.btn.sec{background:#fff;color:var(--green);border:1px solid var(--green)}
+.btn.sec:hover{background:#f1f8f3}
+.btn.danger{background:var(--red)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.full{width:100%}
+/* exam */
+.bar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.bar .in{max-width:1100px;margin:0 auto;padding:8px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.who{font-size:13px;line-height:1.3}.who b{font-size:14px}
+.sp{flex:1}
+.timer{font-variant-numeric:tabular-nums;font-weight:700;font-size:20px;background:#eaf5ee;color:var(--green);border:1px solid #bddac6;padding:6px 14px;border-radius:8px}
+.timer.warn{background:#fff3d6;color:#8a5b00;border-color:#f0d58a}
+.timer.crit{background:#fde7e5;color:var(--red);border-color:#f2b8b3;animation:bl 1s infinite}
+@keyframes bl{50%{opacity:.55}}
+.grid{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:14px;color:var(--mute)}
+.qtext{font-size:18px;line-height:1.5;margin:0 0 16px;font-weight:500}
+.opt{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:8px 0;cursor:pointer;background:#fff;width:100%;text-align:left;font-size:16px}
+.opt:hover{border-color:var(--green2);background:#f6fbf8}
+.opt .l{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid #9aa6b1;display:grid;place-items:center;font-weight:700;font-size:13px}
+.opt.sel{border-color:var(--green);background:#e8f4ec}
+.opt.sel .l{background:var(--green);border-color:var(--green);color:#fff}
+.nav{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.nav .sp{flex:1}
+.flagbtn.on{background:#fff3d6;border-color:var(--amber);color:#8a5b00}
+.pal h3{margin:0 0 4px;font-size:14px}
+.pal .legend{font-size:11.5px;color:var(--mute);display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 10px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.cells{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+.cell{border:1px solid #b9c2cb;background:#fff;border-radius:5px;padding:6px 0;font-size:12px;font-weight:600;position:relative}
+.cell.ans{background:var(--green);border-color:var(--green);color:#fff}
+.cell.cur{outline:3px solid var(--blue);outline-offset:1px}
+.cell.flag::after{content:"";position:absolute;top:2px;right:2px;width:7px;height:7px;border-radius:50%;background:var(--amber)}
+.progress{height:6px;background:#dfe6e2;border-radius:4px;overflow:hidden;margin:10px 0 0}
+.progress i{display:block;height:100%;background:var(--green2);width:0}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(15,25,20,.55);display:grid;place-items:center;z-index:20;padding:16px}
+.modal .box{background:#fff;border-radius:12px;max-width:430px;width:100%;padding:22px}
+.modal h3{margin:0 0 8px}
+.modal .row{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+/* result */
+.score{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.ring{width:130px;height:130px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--green2) calc(var(--p)*1%),#dfe6e2 0);flex:none}
+.ring span{width:100px;height:100px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:28px;font-weight:800;text-align:center;line-height:1}
+.ring small{display:block;font-size:12px;font-weight:600;color:var(--mute);margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;flex:1;min-width:260px}
+.stat{border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.stat b{display:block;font-size:20px}.stat span{font-size:12px;color:var(--mute)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 8px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 14px;font-size:14px}
+.chip.on{background:var(--green);color:#fff;border-color:var(--green)}
+.rev{border:1px solid var(--line);border-left:5px solid var(--line);border-radius:8px;padding:14px 16px;margin:10px 0;background:#fff}
+.rev.ok{border-left-color:var(--green2)}.rev.bad{border-left-color:var(--red)}.rev.skip{border-left-color:var(--amber)}
+.rev .qn{font-size:12px;font-weight:700;color:var(--mute);margin-bottom:4px;display:flex;gap:8px;align-items:center}
+.tag{font-size:11px;padding:2px 8px;border-radius:10px;color:#fff}
+.tag.ok{background:var(--green2)}.tag.bad{background:var(--red)}.tag.skip{background:var(--amber);color:#2b2000}
+.rev p{margin:0 0 8px;font-weight:600;line-height:1.45}
+.ro{padding:7px 10px;border-radius:6px;margin:4px 0;font-size:15px;border:1px solid transparent}
+.ro.correct{background:#e2f3e8;border-color:#9ccfae}
+.ro.wrong{background:#fde7e5;border-color:#f0b2ad}
+.ro b{margin-right:6px}
+.exp{font-size:13.5px;color:#34404b;background:#f5f7f9;border-radius:6px;padding:8px 10px;margin-top:8px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+footer{text-align:center;color:var(--mute);font-size:12px;padding:20px}
+@media(max-width:860px){.grid{grid-template-columns:1fr}.pal{order:2}.cells{grid-template-columns:repeat(10,1fr)}}
+@media(max-width:480px){.cells{grid-template-columns:repeat(8,1fr)}.qtext{font-size:17px}.timer{font-size:17px}}
+@media print{header.top,.bar,.filters,.actions,footer{display:none!important}body{background:#fff}.rev{break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="crest">UNN</div>
+  <h1>UNIVERSITY OF NIGERIA, NSUKKA<small>Computer Based Test (CBT) &middot; Department of Agricultural Economics</small></h1>
+</header>
+
+<!-- LOGIN -->
+<section id="login">
+  <div class="wrap">
+    <div class="card">
+      <h2>AEC 201 / AEC 202 &mdash; Principles of Agricultural Economics</h2>
+      <p class="sub">Practice examination &middot; 100 questions &middot; 25 minutes</p>
+      <form id="loginForm" autocomplete="off" novalidate>
+        <label for="nm">Full name</label>
+        <input id="nm" type="text" placeholder="e.g. Anyim Samuel Toochukwu" maxlength="80">
+        <label for="rg">Registration number</label>
+        <input id="rg" type="text" placeholder="e.g. 2022/248410" maxlength="20" inputmode="numeric">
+        <div class="err" id="loginErr"></div>
+        <div class="rules">
+          <b>Instructions</b>
+          <ul>
+            <li>You have <b>25 minutes</b> to answer all <b>100</b> multiple-choice questions.</li>
+            <li>The timer starts the moment you click <b>Start Exam</b> and keeps running if you refresh the page.</li>
+            <li>The exam submits automatically when time runs out.</li>
+            <li>Your score and the correct answers to every question are shown after you submit.</li>
+          </ul>
+        </div>
+        <button class="btn full" type="submit">Start Exam</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- EXAM -->
+<section id="exam" class="hidden">
+  <div class="bar"><div class="in">
+    <div class="who"><b id="whoName"></b><br><span id="whoReg"></span></div>
+    <div class="sp"></div>
+    <div class="timer" id="timer">25:00</div>
+    <button class="btn danger" id="submitTop">Submit</button>
+  </div></div>
+  <div class="wrap grid">
+    <div class="card">
+      <div class="qhead"><span id="qno"></span><button class="btn sec flagbtn" id="flagBtn">Mark for review</button></div>
+      <p class="qtext" id="qtext"></p>
+      <div id="opts"></div>
+      <div class="nav">
+        <button class="btn sec" id="prev">&larr; Previous</button>
+        <button class="btn sec" id="clear">Clear answer</button>
+        <div class="sp"></div>
+        <button class="btn" id="next">Next &rarr;</button>
+      </div>
+    </div>
+    <aside class="card pal">
+      <h3>Question palette</h3>
+      <div id="count" style="font-size:13px;color:var(--mute)"></div>
+      <div class="progress"><i id="bar"></i></div>
+      <div class="legend"><span><i class="dot" style="background:var(--green)"></i>Answered</span><span><i class="dot" style="background:#fff;border:1px solid #b9c2cb"></i>Not answered</span><span><i class="dot" style="background:var(--amber)"></i>Marked</span></div>
+      <div class="cells" id="cells"></div>
+      <button class="btn full" id="submitSide" style="margin-top:14px">Submit Exam</button>
+    </aside>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section id="result" class="hidden">
+  <div class="wrap">
+    <div class="card">
+      <div style="margin-bottom:14px"><b id="rName" style="font-size:18px"></b><br><span id="rReg" style="color:var(--mute)"></span></div>
+      <div class="score">
+        <div class="ring" id="ring"><span><div id="rScore"></div></span></div>
+        <div class="stats" id="stats"></div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="printBtn">Print / Save as PDF</button>
+        <button class="btn sec" id="retake">Take a new attempt</button>
+      </div>
+    </div>
+    <div class="filters" id="filters">
+      <button class="chip on" data-f="all">All</button>
+      <button class="chip" data-f="bad">Wrong</button>
+      <button class="chip" data-f="skip">Unanswered</button>
+      <button class="chip" data-f="ok">Correct</button>
+    </div>
+    <div id="review"></div>
+  </div>
+</section>
+
+<div class="modal hidden" id="modal"><div class="box">
+  <h3 id="mTitle">Submit exam?</h3>
+  <div id="mBody" style="font-size:14.5px;line-height:1.5"></div>
+  <div class="row"><button class="btn sec" id="mCancel">Go back</button><button class="btn" id="mOk">Yes, submit</button></div>
+</div></div>
+
+<footer>AEC 201/202 practice CBT &middot; Questions drawn from the compiled lecture notes.</footer>
+
+<script>
+const BANK = [{"q": "Economics is the study of how society uses ______ resources to satisfy ______ human wants.", "o": ["scarce; unlimited", "abundant; limited", "unlimited; scarce", "scarce; limited"], "e": "Resources are scarce while human wants are unlimited, so society must choose."}, {"q": "The real cost of any decision, measured by the best alternative not chosen, is called", "o": ["opportunity cost", "explicit cost", "marginal cost", "fixed cost"], "e": "Opportunity cost is what you give up to get an item: the best alternative forgone."}, {"q": "A rational decision maker takes an action only if", "o": ["marginal benefit exceeds marginal cost", "marginal cost exceeds marginal benefit", "total cost is zero", "average cost equals average revenue"], "e": "Economic reasoning at the margin: act only when marginal benefit > marginal cost."}, {"q": "The 'invisible hand' guiding self-interested households and firms to outcomes that benefit society is associated with", "o": ["Adam Smith", "J. M. Keynes", "J. B. Say", "Alfred Marshall"], "e": "Adam Smith, Wealth of Nations: prices are the instrument of the invisible hand."}, {"q": "The main focus of macroeconomics is", "o": ["resource employment and income determination", "market price determination", "the behaviour of a single consumer", "the cost structure of one firm"], "e": "Microeconomics focuses on price determination; macroeconomics on employment and income of the whole economy."}, {"q": "Which of the following is an example of an external cost (negative externality)?", "o": ["Pollution from a factory affecting nearby residents", "A scientific discovery that benefits everyone", "Wages paid to workers", "Income tax paid by a firm"], "e": "Pollution is a cost imposed on bystanders; government taxes it. A discovery is an external benefit, which government subsidises."}, {"q": "'The government provided free lunch to secondary schools' is a ______ statement.", "o": ["positive", "normative", "prescriptive", "subjective"], "e": "Positive statements describe what is and can be tested as true or false."}, {"q": "'The government should provide free lunch to secondary schools' is a ______ statement.", "o": ["normative", "positive", "testable", "factual"], "e": "Normative statements express what ought to be: opinion or value based."}, {"q": "Which of the following is a feature of capitalism?", "o": ["Private ownership of the means of production", "Central planning of all output", "State ownership of the means of production", "Pay strictly according to need decided by the state"], "e": "Capitalism: private ownership, freedom of enterprise, competition, markets and prices, limited government."}, {"q": "Market failure may be caused by", "o": ["externalities and market power", "perfect information and free entry", "many sellers with small market shares", "equal distribution of income"], "e": "Externalities and market power are the two causes of market failure named in the notes."}, {"q": "In a graph, the independent variable is plotted on the", "o": ["X axis", "Y axis", "title line", "origin only"], "e": "Independent variable on X, dependent variable on Y."}, {"q": "A pie chart category of 30 units out of a total of 120 units occupies an angle of", "o": ["90°", "30°", "120°", "45°"], "e": "Angle = (category ÷ total) × 360° = (30 ÷ 120) × 360° = 90°."}, {"q": "Which of the following is an exogenous variable in crop production?", "o": ["Weather", "Crop growth", "Yield per hectare", "Farm revenue"], "e": "Exogenous variables (weather, pests) are determined outside the model; crop growth is endogenous."}, {"q": "Which is a requirement for a good table?", "o": ["It should be numbered, have a title and state its source", "It must have X and Y axes with a scale", "It must be drawn as a curve", "It should have no title"], "e": "A table must be numbered, titled, simple and state its source. Axes and scale belong to graphs."}, {"q": "A point inside the production possibility curve indicates", "o": ["inefficient use or unemployment of resources", "full employment of resources", "output that is unattainable", "economic growth"], "e": "Inside the PPC means resources are unemployed or misused."}, {"q": "An outward shift of the production possibility curve represents", "o": ["economic growth", "recession", "rising unemployment", "a fall in technology"], "e": "More resources or better technology push the PPC outward: economic growth."}, {"q": "From the table (rice, iron ore): (100, 0), (80, 5), (60, 10), (40, 15), (20, 20), (0, 25), the opportunity cost of 5 extra tons of iron ore is", "o": ["20 tons of rice", "5 tons of rice", "10 tons of rice", "40 tons of rice"], "e": "Each move gives 5 more iron ore and costs 20 tons of rice."}, {"q": "According to the law of demand, other things equal, price and quantity demanded are", "o": ["inversely related", "directly related", "unrelated", "equal"], "e": "Higher price means lower quantity demanded (substitution and income effects)."}, {"q": "A change in the price of a good itself causes", "o": ["a movement along its demand curve", "a shift of its demand curve", "a shift of its supply curve", "a change in tastes"], "e": "Own-price change moves you along the curve; other determinants shift it."}, {"q": "Which of the following will shift the demand curve for a good to the right?", "o": ["A rise in the price of a substitute", "A rise in the price of the good itself", "A fall in the number of buyers", "A fall in income for a normal good"], "e": "Dearer substitutes push buyers to this good, so demand increases."}, {"q": "The law of supply states that, ceteris paribus, price and quantity supplied are", "o": ["directly related", "inversely related", "unrelated", "always equal"], "e": "Higher price means higher profit, so producers supply more: upward-sloping supply."}, {"q": "A fall in the cost of production shifts the supply curve", "o": ["to the right", "to the left", "not at all", "upward along the same curve"], "e": "Lower costs raise supply at every price: a rightward shift."}, {"q": "Given Qd = 100 − 2P and Qs = 20 + 2P, the equilibrium price and quantity are", "o": ["P = 20, Q = 60", "P = 30, Q = 40", "P = 10, Q = 80", "P = 25, Q = 50"], "e": "Set 100 − 2P = 20 + 2P, so 4P = 80, P = 20; Q = 100 − 40 = 60."}, {"q": "At a price above the equilibrium price there is", "o": ["excess supply (a surplus)", "excess demand (a shortage)", "equilibrium", "a price ceiling"], "e": "Price above equilibrium means Qs > Qd: surplus."}, {"q": "A price ceiling set below the equilibrium price creates", "o": ["a shortage", "a surplus", "a new equilibrium", "a fall in demand"], "e": "Maximum legal price below equilibrium means Qd > Qs."}, {"q": "A price floor set above the equilibrium price creates", "o": ["a surplus", "a shortage", "equilibrium", "a rise in demand"], "e": "Minimum legal price above equilibrium means Qs > Qd."}, {"q": "Consumer surplus is", "o": ["willingness to pay minus the market price", "market price minus minimum acceptable price", "total revenue minus total cost", "price multiplied by quantity"], "e": "The second option describes producer surplus."}, {"q": "A tax on imports or exports is called a", "o": ["tariff", "quota", "subsidy", "price floor"], "e": "A tariff (customs duty) is a tax; a quota limits quantity."}, {"q": "Which of the following is NOT a reason for imposing tariffs?", "o": ["To encourage dumping", "To protect infant industries", "To raise government revenue", "To protect against dumping"], "e": "Tariffs are used to protect against dumping, not to encourage it."}, {"q": "Price elasticity of demand is calculated as", "o": ["%ΔQd ÷ %ΔP", "%ΔP ÷ %ΔQd", "ΔP ÷ ΔQd", "%ΔQd ÷ %ΔY"], "e": "Ed = %ΔQd ÷ %ΔP. %ΔY gives income elasticity."}, {"q": "If the price of a good rises by 20% and quantity demanded falls by 30%, price elasticity of demand is", "o": ["1.5 (elastic)", "0.67 (inelastic)", "1.0 (unitary)", "0.5 (inelastic)"], "e": "30 ÷ 20 = 1.5, which is greater than 1, so demand is elastic."}, {"q": "If demand is inelastic, a rise in price will", "o": ["increase total revenue", "decrease total revenue", "leave total revenue unchanged", "make demand perfectly elastic"], "e": "Inelastic: quantity falls proportionately less than price rises, so TR rises."}, {"q": "Goods whose demand falls as consumer income rises are called", "o": ["inferior goods", "luxury goods", "necessities", "complements"], "e": "Inferior goods have negative income elasticity (e.g. margarine)."}, {"q": "A positive cross-price elasticity of demand between two goods shows that they are", "o": ["substitutes", "complements", "unrelated", "inferior"], "e": "Positive Exy means substitutes (Coke and Pepsi); negative means complements."}, {"q": "A bumper harvest can reduce farmers' total income because", "o": ["demand for essential food crops is inelastic, so the price fall outweighs the rise in quantity sold", "demand for food crops is elastic", "supply of food falls after the harvest", "farmers pay higher taxes"], "e": "This is the paradox of plenty: TR = P × Q falls when demand is inelastic and supply increases."}, {"q": "Total utility is at its maximum when marginal utility is", "o": ["zero", "maximum", "negative", "equal to price"], "e": "TU peaks when MU = 0; beyond that MU is negative (disutility)."}, {"q": "The tendency for each extra unit consumed to add less satisfaction than the previous one is the", "o": ["law of diminishing marginal utility", "law of demand", "law of supply", "law of diminishing returns"], "e": "Law of diminishing marginal utility: MU falls as consumption rises."}, {"q": "A consumer's total utility is 18 utils from 3 bottles and 20 utils from 4 bottles. The marginal utility of the 4th bottle is", "o": ["2 utils", "4 utils", "20 utils", "6 utils"], "e": "MU = ΔTU ÷ ΔQ = (20 − 18) ÷ 1 = 2."}, {"q": "A consumer maximises utility when", "o": ["MUa/Pa = MUb/Pb and the whole budget is spent", "MUa = MUb regardless of prices", "TUa = TUb", "all goods have zero marginal utility"], "e": "The equi-marginal principle: the last naira spent on each good yields the same marginal utility."}, {"q": "Rice costs ₦2 and beans cost ₦4 with a budget of ₦16. The notes' worked example gives the utility-maximising bundle as", "o": ["2 plates of rice and 3 plates of beans", "1 plate of rice and 2 plates of beans", "3 plates of rice and 4 plates of beans", "4 plates of rice and 5 plates of beans"], "e": "(2, 3) costs 2×2 + 3×4 = ₦16 and gives 31 utils; the other bundles either leave money unspent or exceed ₦16."}, {"q": "Negative marginal utility is known as", "o": ["disutility", "diminishing utility", "total utility", "utility maximisation"], "e": "When MU turns negative it is called disutility."}, {"q": "Which of the following is NOT a property of indifference curves?", "o": ["They slope upward", "They slope downward", "They are convex to the origin", "They cannot intersect"], "e": "Indifference curves are downward sloping, cannot cross, are convex, and higher curves mean more satisfaction."}, {"q": "The marginal rate of substitution is", "o": ["the slope of the indifference curve", "the slope of the budget line", "the ratio of total utilities", "the price ratio"], "e": "MRS is the slope of the indifference curve; it diminishes along the curve."}, {"q": "The slope of the budget line is", "o": ["−Px/Py", "Px × Py", "M ÷ Px", "MUx/MUy"], "e": "Budget line Px·X + Py·Y = M has slope −Px/Py, the opportunity cost of X in terms of Y."}, {"q": "An increase in consumer income, with prices unchanged, causes the budget line to", "o": ["shift outward in parallel", "rotate about the x-intercept", "shift inward in parallel", "become steeper"], "e": "Income change shifts the line in parallel; a price change rotates it."}, {"q": "A consumer with income ₦1,400 faces yam at ₦200. The maximum quantity of yam affordable is", "o": ["7", "5", "14", "10"], "e": "1,400 ÷ 200 = 7 (the notes show the x-intercept moving from 5 to 7)."}, {"q": "The consumer's optimum is reached where", "o": ["the budget line is tangent to the highest attainable indifference curve (MRS = Px/Py)", "the budget line cuts the indifference curve", "MRS equals zero", "total utility is zero"], "e": "At tangency the slopes are equal: MRS = Px/Py."}, {"q": "The primary role of a firm in the economy is", "o": ["value addition", "final consumption", "tax collection", "setting national prices"], "e": "A firm uses resources to produce goods and services, adding value, to earn profit."}, {"q": "Which factor of production and reward pairing is correct?", "o": ["Capital – interest", "Land – wage", "Labour – rent", "Entrepreneurship – interest"], "e": "Land: rent; Labour: wage; Capital: interest; Entrepreneurship: profit."}, {"q": "In the short run", "o": ["at least one input is fixed", "all inputs are variable", "all costs are variable", "output cannot change"], "e": "Short run: at least one input fixed. Long run: all inputs can vary."}, {"q": "Marginal physical product (MPP) is", "o": ["the slope of the total physical product curve", "total output divided by variable input", "total output multiplied by price", "the slope of the AFC curve"], "e": "MPP = ΔTPP ÷ ΔX, which is the slope of TPP. The second option is APP."}, {"q": "The rational stage of production for a price-taking firm is the stage where", "o": ["AP = MP up to MP = 0 (decreasing returns)", "MP is greater than AP", "MP is negative", "TP is falling"], "e": "Stage 2 runs from AP = MP to MP = 0 and is the rational stage."}, {"q": "Rent forgone on a building the firm owns is an example of", "o": ["an implicit cost", "an explicit cost", "a variable cost", "marginal revenue"], "e": "Implicit costs involve no direct payment but an alternative is sacrificed."}, {"q": "Minimum average total cost occurs where", "o": ["MC = ATC", "MC = AFC", "MC = 0", "MR = AR"], "e": "MC cuts ATC at its minimum point."}, {"q": "A firm's total cost is ₦500 at 10 units and ₦560 at 12 units. Its marginal cost over this range is", "o": ["₦30", "₦60", "₦46.67", "₦20"], "e": "MC = ΔTC ÷ ΔQ = 60 ÷ 2 = ₦30."}, {"q": "A firm in perfect competition faces a demand curve that is", "o": ["horizontal, equal to its AR and MR", "downward sloping", "vertical", "upward sloping"], "e": "The perfectly competitive firm is a price taker: P = AR = MR."}, {"q": "A perfectly competitive firm maximises profit where", "o": ["P = MC", "P = ATC at minimum output", "TR = 0", "MC = 0"], "e": "MR = MC and since P = MR, the rule becomes P = MC."}, {"q": "Which of the following describes a monopoly?", "o": ["One seller, no close substitutes and barriers to entry", "Many sellers of identical products", "A few interdependent sellers", "Many sellers of differentiated products"], "e": "A monopolist is a price maker protected by barriers to entry."}, {"q": "If demand is P = 100 − 2Q and the monopolist's MC = 40, profit-maximising output and price are", "o": ["Q = 15, P = 70", "Q = 30, P = 40", "Q = 10, P = 80", "Q = 15, P = 40"], "e": "MR = 100 − 4Q = 40, so Q = 15; P = 100 − 2(15) = 70."}, {"q": "Many firms selling differentiated products that are close but not perfect substitutes describes", "o": ["monopolistic competition", "perfect competition", "monopoly", "oligopoly"], "e": "Examples: cooking oil brands, toothpaste, soft drinks. Long-run profit is normal."}, {"q": "Which type of competition do oligopolists generally prefer, and why?", "o": ["Non-price competition such as advertising, because price wars harm all firms", "Price cutting, because it always raises profit", "No competition at all, by law", "Perfect price competition"], "e": "Oligopoly firms are interdependent, so they avoid price wars."}, {"q": "The three main goals of macroeconomics are", "o": ["economic growth, full employment and stable prices", "rent, wages and interest", "tariffs, quotas and subsidies", "scarcity, choice and opportunity cost"], "e": "Growth, low unemployment and low inflation."}, {"q": "The lowest point of the business cycle is the", "o": ["trough", "peak", "recovery", "expansion"], "e": "The extreme points are the peak (highest) and the trough (lowest)."}, {"q": "Leading indicators are variables that", "o": ["move before the economy does and help predict a cycle", "move after the economy has changed", "move together with GDP only", "never change"], "e": "The Composite Index of Leading Indicators helps predict the onset of a cycle."}, {"q": "Unemployment that rises during recession and is the biggest cause of joblessness is", "o": ["cyclical unemployment", "frictional unemployment", "structural unemployment", "voluntary unemployment only"], "e": "Cyclical (deficient-demand) unemployment varies with the business cycle."}, {"q": "Workers who are between jobs or voluntarily changing jobs are counted as", "o": ["frictionally unemployed", "structurally unemployed", "cyclically unemployed", "outside the labour force by definition"], "e": "Frictional unemployment is not unhealthy: people are looking for suitable jobs."}, {"q": "Unemployment caused by a mismatch between workers' skills or location and available jobs, including automation, is", "o": ["structural unemployment", "frictional unemployment", "cyclical unemployment", "seasonal demand"], "e": "Technological change and automation are typical causes of structural unemployment."}, {"q": "The natural rate of unemployment consists of", "o": ["frictional and structural unemployment", "cyclical and frictional unemployment", "cyclical and structural unemployment", "voluntary unemployment only"], "e": "Natural rate = frictional + structural (no cyclical unemployment)."}, {"q": "A country has a labour force of 120,000 and 6,000 unemployed. The unemployment rate is", "o": ["5%", "6%", "2%", "20%"], "e": "(6,000 ÷ 120,000) × 100 = 5%."}, {"q": "The Beveridge curve shows an inverse relationship between", "o": ["the unemployment rate and the job vacancy rate", "inflation and money supply", "GDP and population", "taxes and government spending"], "e": "High unemployment with low vacancies signals recession."}, {"q": "According to Okun's law, each 1 percentage point by which actual unemployment exceeds the natural rate reduces GDP by about", "o": ["2 percent", "1 percent", "5 percent", "10 percent"], "e": "The GDP gap rises by about 2% per percentage point."}, {"q": "A sustained, general rise in the price level is called", "o": ["inflation", "deflation", "stagflation", "recession"], "e": "Inflation must be general and continuous."}, {"q": "Inflation occurring together with recession is called", "o": ["stagflation", "deflation", "hyperinflation", "creeping inflation"], "e": "Stagflation = stagnation + inflation."}, {"q": "A rise in the price level caused by higher raw material and wage costs is", "o": ["cost-push inflation", "demand-pull inflation", "deflation", "hyperinflation only"], "e": "Cost-push: supply falls because production costs rise."}, {"q": "Inflation of 15% a year is classified as", "o": ["running inflation", "creeping inflation", "walking inflation", "deflation"], "e": "Creeping: below 3%; walking: 3% to below 10%; running: 10% to 20%; then hyperinflation."}, {"q": "During inflation, the group that generally loses most is", "o": ["fixed-income earners", "traders and speculators", "property owners", "those who correctly anticipate inflation"], "e": "Fixed-income earners lose purchasing power; flexible-income earners tend to gain."}, {"q": "If a basket of goods costs ₦150 this year and ₦100 in the base year, the CPI is", "o": ["150", "100", "50", "66.7"], "e": "CPI = (cost this year ÷ cost in base year) × 100 = 150."}, {"q": "The price of a bag of onions rises from ₦20 to ₦21. The inflation rate for this item is", "o": ["5%", "1%", "10%", "21%"], "e": "(21 − 20) ÷ 20 × 100 = 5%."}, {"q": "If nominal GDP is ₦600 billion and real GDP is ₦500 billion, the GDP deflator is", "o": ["120", "83.3", "100", "110"], "e": "(600 ÷ 500) × 100 = 120: prices rose 20% from the base year."}, {"q": "GDP is the market value of all final goods and services produced", "o": ["within a country in a given period", "by a country's nationals anywhere in the world", "by the government only", "including all second-hand sales"], "e": "GNP counts output by nationals anywhere; GDP counts output within the country."}, {"q": "If GDP is ₦500bn, income earned abroad by residents (R) is ₦40bn and payments to foreigners (P) are ₦25bn, GNP is", "o": ["₦515bn", "₦485bn", "₦565bn", "₦500bn"], "e": "GNP = GDP + R − P = 500 + 40 − 25 = 515."}, {"q": "Using the expenditure approach, if C = 500, I = 100, G = 150, exports = 80 and imports = 90, GDP is", "o": ["740", "820", "750", "830"], "e": "GDP = C + I + G + (X − M) = 500 + 100 + 150 − 10 = 740."}, {"q": "Which of these is excluded from the government spending component (G) of GDP?", "o": ["Transfer payments such as pensions", "Salaries of civil servants", "Spending on roads", "Spending on schools"], "e": "G covers purchases of goods and services only, not transfer payments."}, {"q": "Disposable income is equal to", "o": ["personal income minus personal income tax", "GDP minus depreciation", "GNP minus GDP", "consumption plus investment"], "e": "Disposable income is what households can consume or save."}, {"q": "Second-hand transactions are excluded from GDP because", "o": ["they only change ownership and were counted when first produced", "they are illegal", "they are intermediate goods", "they are not measured in naira"], "e": "Including them would be double counting."}, {"q": "25 oranges cost ₦250 in Nigeria and $6 in the US. The purchasing power parity rate is", "o": ["₦41.67 per $1", "₦6 per $1", "₦250 per $1", "₦24 per $1"], "e": "PPP = 250 ÷ 6 = ₦41.67 per dollar."}, {"q": "In the 45° line diagram, to the right of the equilibrium output", "o": ["aggregate expenditure is less than output and inventories accumulate", "aggregate expenditure exceeds output and inventories fall", "output equals spending", "firms raise production"], "e": "AE < output means unsold goods build up, so firms cut production."}, {"q": "The break-even point on the consumption function is where", "o": ["C = Y", "C = 0", "S = Y", "MPC = 0"], "e": "At break-even there is no saving and no dissaving."}, {"q": "If the marginal propensity to consume is 0.8, the multiplier is", "o": ["5", "8", "1.25", "0.2"], "e": "k = 1 ÷ (1 − MPC) = 1 ÷ 0.2 = 5."}, {"q": "For the consumption function C = 5,500 + 0.9Y, the multiplier is", "o": ["10", "9", "0.9", "5,500"], "e": "MPC = 0.9, so k = 1 ÷ (1 − 0.9) = 10."}, {"q": "In a recession with a negative GDP gap, appropriate expansionary fiscal policy is to", "o": ["raise government spending and/or cut taxes", "cut spending and raise taxes", "raise interest rates only", "run a budget surplus"], "e": "Expansionary policy leads to a deficit (deficit spending)."}, {"q": "Which of the following is an automatic (built-in) stabiliser?", "o": ["A progressive income tax", "A new road-building programme", "A decision to cut tax rates by parliament", "A devaluation of the currency"], "e": "Net taxes rise automatically as GDP rises and fall when it falls, with no new decision needed."}, {"q": "Government borrowing that raises interest rates and reduces private investment is called", "o": ["crowding out", "the multiplier effect", "deficit spending", "dumping"], "e": "Borrowing raises demand for loanable funds, pushing up interest rates."}, {"q": "A budget deficit occurs when", "o": ["government expenditure exceeds revenue", "revenue exceeds expenditure", "revenue equals expenditure", "exports exceed imports"], "e": "A deficit is financed by borrowing (issuing bonds); accumulated borrowing is public debt."}, {"q": "The time between the start of an economic problem and its discovery is the", "o": ["recognition lag", "administrative lag", "operation lag", "crowding-out period"], "e": "Recognition (realisation) lag; then administrative lag; then operation lag."}, {"q": "By definition, the balance of payments", "o": ["sums to zero", "is always in surplus", "is always in deficit", "equals GDP"], "e": "Every payment out is matched by a receipt in; deficit or surplus refers to the movement of official reserves."}, {"q": "The current account records", "o": ["goods, services, net investment income and net transfers", "purchases of stocks, bonds and real estate", "only official reserves", "only exports of goods"], "e": "Purchases and sales of assets belong to the capital and financial account."}, {"q": "A rise in the price of the domestic currency in terms of foreign currency under a floating system is called", "o": ["appreciation", "depreciation", "devaluation", "revaluation"], "e": "Appreciation: E rises. Devaluation and revaluation are the equivalents under a fixed exchange rate."}, {"q": "The classical premise that 'supply creates its own demand' is associated with", "o": ["J. B. Say", "J. M. Keynes", "Adam Smith", "Alfred Marshall"], "e": "Say's law: production creates income equal to output. Keynesians stress that short-run instability comes from lack of spending."}, {"q": "Price discrimination by a firm requires", "o": ["market power, market separation and no arbitrage", "perfect competition", "identical buyers", "free resale between markets"], "e": "Buyers must not be able to resell, otherwise the price differences disappear."}];
+const TOTAL = BANK.length;
+const DURATION = 25 * 60 * 1000;
+const LS = 'aec_cbt_v1:';
+const $ = id => document.getElementById(id);
+let S = null, cur = 0, tick = null;
+
+/* ---------- storage (safe) ---------- */
+function load(reg){ try{ const v = localStorage.getItem(LS+reg); return v ? JSON.parse(v) : null; }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(LS+S.reg, JSON.stringify(S)); }catch(e){} }
+function wipe(reg){ try{ localStorage.removeItem(LS+reg); }catch(e){} }
+
+/* ---------- helpers ---------- */
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function normReg(r){ return r.trim().replace(/\s+/g,'').replace(/\\/g,'/'); }
+function show(id){ ['login','exam','result'].forEach(x=>$(x).classList.toggle('hidden',x!==id)); window.scrollTo(0,0); }
+const L = ['A','B','C','D'];
+
+/* ---------- login ---------- */
+$('loginForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const name = $('nm').value.trim().replace(/\s+/g,' ');
+  const reg = normReg($('rg').value);
+  const err = $('loginErr');
+  if(name.length < 3 || !/\s/.test(name)){ err.textContent='Enter your full name (at least two names).'; return; }
+  if(!/^\d{4}\/\d{4,8}$/.test(reg)){ err.textContent='Enter a valid registration number, e.g. 2022/248410.'; return; }
+  err.textContent='';
+  const old = load(reg);
+  if(old){
+    S = old; S.name = name; // allow correcting the name spelling
+    save();
+    if(S.submitted){ showResult(); return; }
+    if(Date.now() >= S.start + DURATION){ finish(true); return; }
+    startExam(true); return;
+  }
+  S = {
+    name, reg, start: Date.now(), submitted:false, end:null,
+    order: shuffle([...Array(TOTAL).keys()]),
+    perm: BANK.map(()=>shuffle([0,1,2,3])),
+    ans: Array(TOTAL).fill(null),   // original option index chosen
+    flag: Array(TOTAL).fill(false)
+  };
+  save(); startExam(false);
+});
+
+/* ---------- exam ---------- */
+function startExam(){
+  $('whoName').textContent = S.name; $('whoReg').textContent = S.reg;
+  cur = 0; buildCells(); render(); show('exam');
+  clearInterval(tick); tickFn(); tick = setInterval(tickFn, 500);
+}
+function left(){ return Math.max(0, S.start + DURATION - Date.now()); }
+function tickFn(){
+  const ms = left(), t = $('timer'), s = Math.ceil(ms/1000);
+  t.textContent = String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  t.classList.toggle('warn', ms<=5*60*1000 && ms>60*1000);
+  t.classList.toggle('crit', ms<=60*1000);
+  if(ms<=0){ clearInterval(tick); finish(true); }
+}
+function buildCells(){
+  const c = $('cells'); c.textContent='';
+  for(let i=0;i<TOTAL;i++){
+    const b = document.createElement('button'); b.className='cell'; b.textContent=i+1; b.type='button';
+    b.addEventListener('click',()=>{cur=i;render();});
+    c.appendChild(b);
+  }
+}
+function render(){
+  const qi = S.order[cur], q = BANK[qi];
+  $('qno').textContent = 'Question '+(cur+1)+' of '+TOTAL;
+  $('qtext').textContent = q.q;
+  const box = $('opts'); box.textContent='';
+  S.perm[qi].forEach((orig,j)=>{
+    const b = document.createElement('button'); b.type='button';
+    b.className = 'opt'+(S.ans[qi]===orig?' sel':'');
+    const l = document.createElement('span'); l.className='l'; l.textContent=L[j];
+    const t = document.createElement('span'); t.textContent=q.o[orig];
+    b.append(l,t);
+    b.addEventListener('click',()=>{ S.ans[qi]=orig; save(); render(); });
+    box.appendChild(b);
+  });
+  $('flagBtn').classList.toggle('on', S.flag[qi]);
+  $('flagBtn').textContent = S.flag[qi] ? 'Marked for review' : 'Mark for review';
+  $('prev').disabled = cur===0; $('next').disabled = cur===TOTAL-1;
+  refreshPalette();
+}
+function refreshPalette(){
+  const cells = $('cells').children; let n=0;
+  for(let i=0;i<TOTAL;i++){
+    const qi=S.order[i], a=S.ans[qi]!==null; if(a)n++;
+    cells[i].className='cell'+(a?' ans':'')+(S.flag[qi]?' flag':'')+(i===cur?' cur':'');
+  }
+  $('count').textContent = n+' of '+TOTAL+' answered';
+  $('bar').style.width = (n/TOTAL*100)+'%';
+}
+$('prev').onclick=()=>{ if(cur>0){cur--;render();} };
+$('next').onclick=()=>{ if(cur<TOTAL-1){cur++;render();} };
+$('clear').onclick=()=>{ S.ans[S.order[cur]]=null; save(); render(); };
+$('flagBtn').onclick=()=>{ const qi=S.order[cur]; S.flag[qi]=!S.flag[qi]; save(); render(); };
+document.addEventListener('keydown', e=>{
+  if($('exam').classList.contains('hidden') || !$('modal').classList.contains('hidden')) return;
+  if(e.target.tagName==='INPUT') return;
+  const k=e.key.toLowerCase();
+  if(k==='arrowright'||k==='n'){ $('next').click(); }
+  else if(k==='arrowleft'||k==='p'){ $('prev').click(); }
+  else if('abcd'.includes(k) && k.length===1){ const j='abcd'.indexOf(k); const qi=S.order[cur]; S.ans[qi]=S.perm[qi][j]; save(); render(); }
+});
+window.addEventListener('beforeunload', e=>{
+  if(S && !S.submitted && !$('exam').classList.contains('hidden')){ e.preventDefault(); e.returnValue=''; }
+});
+
+/* ---------- submit ---------- */
+function askSubmit(){
+  const un = S.ans.filter(a=>a===null).length, fl = S.flag.filter(Boolean).length;
+  $('mBody').textContent = 'You have answered '+(TOTAL-un)+' of '+TOTAL+' questions.'
+    + (un? ' '+un+' unanswered.':'') + (fl? ' '+fl+' marked for review.':'')
+    + ' Once you submit you cannot change your answers.';
+  $('modal').classList.remove('hidden');
+}
+$('submitTop').onclick=askSubmit; $('submitSide').onclick=askSubmit;
+$('mCancel').onclick=()=>$('modal').classList.add('hidden');
+$('mOk').onclick=()=>{ $('modal').classList.add('hidden'); finish(false); };
+
+function finish(timeUp){
+  clearInterval(tick);
+  if(!S.submitted){ S.submitted=true; S.end=Math.min(Date.now(), S.start+DURATION); S.timeUp=!!timeUp; save(); }
+  showResult();
+}
+
+/* ---------- result ---------- */
+function grade(p){ return p>=70?'A':p>=60?'B':p>=50?'C':p>=45?'D':p>=40?'E':'F'; }
+function showResult(){
+  let ok=0, bad=0, skip=0;
+  S.ans.forEach((a,i)=>{ if(a===null)skip++; else if(a===0)ok++; else bad++; });
+  const pct = Math.round(ok/TOTAL*1000)/10, used = Math.round((S.end-S.start)/1000);
+  $('rName').textContent=S.name; $('rReg').textContent=S.reg;
+  $('rScore').innerHTML=''; 
+  const big=document.createElement('div'); big.textContent=ok+'/'+TOTAL;
+  const sm=document.createElement('small'); sm.textContent=pct+'%'; $('rScore').append(big,sm);
+  $('ring').style.setProperty('--p', pct);
+  const st=[['Score',ok+' / '+TOTAL],['Percentage',pct+'%'],['Grade',grade(pct)],['Correct',ok],['Wrong',bad],['Unanswered',skip],['Time used',Math.floor(used/60)+'m '+String(used%60).padStart(2,'0')+'s']];
+  const box=$('stats'); box.textContent='';
+  st.forEach(([k,v])=>{ const d=document.createElement('div'); d.className='stat'; const b=document.createElement('b'); b.textContent=v; const s=document.createElement('span'); s.textContent=k; d.append(b,s); box.appendChild(d); });
+  const rv=$('review'); rv.textContent='';
+  S.order.forEach((qi,pos)=>{
+    const q=BANK[qi], a=S.ans[qi], kind = a===null?'skip':(a===0?'ok':'bad');
+    const d=document.createElement('div'); d.className='rev '+kind; d.dataset.k=kind;
+    const h=document.createElement('div'); h.className='qn';
+    const n=document.createElement('span'); n.textContent='Question '+(pos+1);
+    const tg=document.createElement('span'); tg.className='tag '+kind; tg.textContent = kind==='ok'?'Correct':kind==='bad'?'Wrong':'Unanswered';
+    h.append(n,tg); d.appendChild(h);
+    const p=document.createElement('p'); p.textContent=q.q; d.appendChild(p);
+    S.perm[qi].forEach((orig,j)=>{
+      const o=document.createElement('div'); o.className='ro'+(orig===0?' correct':(orig===a?' wrong':''));
+      const b=document.createElement('b'); b.textContent=L[j]+'.';
+      const t=document.createElement('span'); t.textContent=q.o[orig]+(orig===0?'  \u2713 Correct answer':'')+(orig===a&&orig!==0?'  \u2717 Your answer':'')+(orig===a&&orig===0?'  (your answer)':'');
+      o.append(b,t); d.appendChild(o);
+    });
+    const e=document.createElement('div'); e.className='exp'; e.textContent='Explanation: '+q.e; d.appendChild(e);
+    rv.appendChild(d);
+  });
+  applyFilter('all'); show('result');
+}
+function applyFilter(f){
+  document.querySelectorAll('#filters .chip').forEach(c=>c.classList.toggle('on',c.dataset.f===f));
+  document.querySelectorAll('#review .rev').forEach(r=>r.classList.toggle('hidden', f!=='all' && r.dataset.k!==f));
+}
+$('filters').addEventListener('click',e=>{ if(e.target.dataset.f) applyFilter(e.target.dataset.f); });
+$('printBtn').onclick=()=>{ applyFilter('all'); window.print(); };
+$('retake').onclick=()=>{ wipe(S.reg); S=null; $('nm').value=''; $('rg').value=''; show('login'); };
+</script>
+</body>
+</html>
